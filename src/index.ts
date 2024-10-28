@@ -1,8 +1,7 @@
 import WebSocket from 'ws';
 import dotenv from 'dotenv';
 import { setupWebSocketServer } from './config';
-import { handlePlayerRegistration } from './controllers/playerController';
-import { handleCreateRoom, handleAddUserToRoom } from './controllers/roomController';
+import { handleCreateRoom, handleAddUserToRoom, handlePlayerRegistration } from './controllers/roomController';
 import { handleStartGame, handlePlaceShip, handleAttack } from './controllers/gameController';
 
 dotenv.config();
@@ -14,7 +13,6 @@ wss.on('connection', (ws: WebSocket) => {
     ws.on('message', (message: string) => {
         try {
             const parsedMessage = JSON.parse(message);
-
             switch (parsedMessage.type) {
                 case 'reg':
                     handlePlayerRegistration(ws, JSON.parse(parsedMessage.data));
@@ -25,11 +23,11 @@ wss.on('connection', (ws: WebSocket) => {
                 case 'add_user_to_room':
                     handleAddUserToRoom(ws, JSON.parse(parsedMessage.data));
                     break;
+                case 'add_ships':
+                    handlePlaceShip(ws, parsedMessage.roomId, JSON.parse(parsedMessage.data).ships);
+                    break;
                 case 'start_game':
                     handleStartGame(ws, parsedMessage.roomId);
-                    break;
-                case 'place_ship':
-                    handlePlaceShip(ws, parsedMessage.roomId, parsedMessage.ship);
                     break;
                 case 'attack':
                     handleAttack(ws, parsedMessage.roomId, parsedMessage.target);

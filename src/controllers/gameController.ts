@@ -1,15 +1,12 @@
-import {GameBoard, AttackResult, Ship} from '../interfaces';
-import { createEmptyBoard, placeShipOnBoard, processAttack } from '../utils/boardUtils';
+import {AttackResult, GameBoard, Ship} from '../interfaces';
+import {createEmptyBoard, placeShipOnBoard, processAttack} from '../utils/boardUtils';
 import WebSocket from 'ws';
-import { sendErrorMessage } from '../utils/messageUtils';
+import {sendErrorMessage} from '../utils/messageUtils';
 
 export const games: { [roomId: string]: GameBoard } = {};
 
-export function handleStartGame(ws: WebSocket, roomId: string) {
-    console.log('VALUE_0', games)
-
-    const board = createEmptyBoard(10);
-    games[roomId] = board;
+export const handleStartGame = (ws: WebSocket, roomId: string) =>  {
+    games[roomId] = createEmptyBoard(10);
 
     ws.send(JSON.stringify({
         type: 'game_started',
@@ -17,10 +14,9 @@ export function handleStartGame(ws: WebSocket, roomId: string) {
     }));
 }
 
-export function handlePlaceShip(ws: WebSocket, roomId: string, ship: Ship[]) {
+export const handlePlaceShip = (ws: WebSocket, roomId: string, ship: Ship[]) => {
     games[roomId] = createEmptyBoard(10);
     const game = games[roomId];
-    console.log('VALUE_GAME', ship)
     if (!game) {
         sendErrorMessage(ws, 'Game not found');
         return;
@@ -36,7 +32,7 @@ export function handlePlaceShip(ws: WebSocket, roomId: string, ship: Ship[]) {
     }));
 }
 
-export function handleAttack(ws: WebSocket, roomId: string, target: { x: number; y: number }) {
+export const handleAttack = (ws: WebSocket, roomId: string, target: { x: number; y: number }) => {
     const game = games[roomId];
     if (!game) {
         sendErrorMessage(ws, 'Game not found');

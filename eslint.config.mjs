@@ -32,6 +32,11 @@ export default [
     settings: {
       jest: true,
       node: true,
+      'import/resolver': {
+        node: {
+          extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        },
+      },
     },
   },
 ];

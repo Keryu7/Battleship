@@ -1,5 +1,5 @@
-import WebSocket, { WebSocketServer } from 'ws';
+import { WebSocketServer } from 'ws';
 
-export function setupWebSocketServer(port: number): WebSocketServer {
+export const setupWebSocketServer = (port: number): WebSocketServer => {
     return new WebSocketServer({ port });
 }

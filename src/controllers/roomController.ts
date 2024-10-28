@@ -7,7 +7,7 @@ const rooms: Room[] = [];
 const players: Player[] = [];
 const wsToPlayerId = new Map<WebSocket, string>();
 
-export function handlePlayerRegistration(ws: WebSocket, data: { name: string; password: string }) {
+export const handlePlayerRegistration = (ws: WebSocket, data: { name: string; password: string }) => {
     const { name, password } = data;
 
     const existingPlayer = players.find(player => player.name === name);
@@ -26,10 +26,7 @@ export function handlePlayerRegistration(ws: WebSocket, data: { name: string; pa
     }));
 }
 
-export function getPlayerIdBySocket(ws: WebSocket): string | undefined {
-    return wsToPlayerId.get(ws);
-}
-export function handleCreateRoom(ws: WebSocket) {
+export const handleCreateRoom = (ws: WebSocket) =>  {
     const roomId = uuidv4();
     const newRoom: Room = { id: roomId, players: [] };
     rooms.push(newRoom);
@@ -43,7 +40,7 @@ export function handleCreateRoom(ws: WebSocket) {
     }));
 }
 
-export function handleAddUserToRoom(ws: WebSocket, data: { indexRoom: string }) {
+export const handleAddUserToRoom = (ws: WebSocket, data: { indexRoom: string }) => {
     const room = rooms.find(room => room.id === data.indexRoom);
 
     if (!room || room.players.length >= 2) {
